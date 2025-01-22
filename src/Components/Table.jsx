@@ -8,14 +8,7 @@
 // Components:
 // CSS:
 
-function Table({
-  columnLabels,
-  propertyNames,
-  renderFns,
-  data,
-  id,
-  className,
-}) {
+function Table({ columnLabels, renderFns, data, id, className }) {
   // Props check:
   if (
     !columnLabels ||

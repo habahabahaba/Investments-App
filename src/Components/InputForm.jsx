@@ -11,8 +11,11 @@ import NumInput from './NumInput';
 // CSS:
 
 function InputForm({ inputValues, inputDispatch, error }) {
+  // Props
   const { initialInvestment, annualInvestment, expectedReturn, duration } =
     inputValues;
+
+  // Handlers:
   const handler =
     (actionName) =>
     ({ target: { value } }) => {
@@ -21,6 +24,7 @@ function InputForm({ inputValues, inputDispatch, error }) {
         payload: { value: value },
       });
     };
+
   // JSX:
   return (
     <form id='user-input'>
