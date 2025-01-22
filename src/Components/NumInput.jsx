@@ -9,7 +9,7 @@
 // CSS:
 // Types, interfaces and enumns:
 
-function NumInput({ name, value, changeHandler, min, step }) {
+function NumInput({ name, value, changeHandler, min, step, error = '' }) {
   // JSX:
   return (
     <div>
@@ -22,6 +22,7 @@ function NumInput({ name, value, changeHandler, min, step }) {
         value={value || ''}
         onChange={changeHandler}
       />
+      <span>{error}</span>
     </div>
   );
 }

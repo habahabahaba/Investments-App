@@ -1,3 +1,5 @@
+// Utils:
+import { formatter } from '../util/investment';
 // 3rd party:
 // Redux RTK:
 // Store:
@@ -6,50 +8,49 @@
 import { useReducer } from 'react';
 // Context:
 // Hooks:
+import useCalculator from '../hooks/useCalculator/useCalculator';
 // Components:
 import InputForm from './InputForm';
-// CSS:
-export const calculatorActions = {
-  initInvest: 'SET_INITIAL_INVESTMENT',
-  annualInvest: 'SET_ANNUAL_INVESTMENT',
-  expectReturn: 'SET_EXPECTED_RETURN',
-  duration: 'SET_DURATION',
-};
-
-// For reducer:
-const initState = {
-  initialInvestment: 0,
-  annualInvestment: 0,
-  expectedReturn: 0,
-  duration: 0,
-};
-
-function calculatorReducer(state, { name, payload }) {
-  console.log('[Calculator] reducer action: ', { name, payload });
-  const newValue = payload.value;
-  switch (name) {
-    case 'SET_INITIAL_INVESTMENT':
-      return { ...state, initialInvestment: newValue };
-    case 'SET_ANNUAL_INVESTMENT':
-      return { ...state, annualInvestment: newValue };
-    case 'SET_EXPECTED_RETURN':
-      return { ...state, expectedReturn: newValue };
-    case 'SET_DURATION':
-      return { ...state, duration: newValue };
-
-    default:
-      throw new Error('Invalid Calculator Action !');
-  }
-}
+import ResultsTable from './ResultsTable';
+import Table from './Table';
 
 function Calculator() {
   // State:
-  const [state, dispatch] = useReducer(calculatorReducer, initState);
-  console.log('[Calculator] reducer state: ', state);
+  const { inputState, inputDispatch, investmentResults, error } =
+    useCalculator();
+  console.log('[Calculator] reducer inputState: ', inputState);
   // JSX:
+  const table =
+    Object.values(inputState).every((value) => value !== '') &&
+    Object.values(error).every((value) => !value) ? (
+      <Table
+        columnLabels={[
+          'Year',
+          'Investment Value',
+          'Interest (Year)',
+          'Total Interest',
+          'Invested Capital',
+        ]}
+        renderFns={[
+          (y) => {
+            return y;
+          },
+        ].concat(new Array(4).fill((data) => formatter.format(data)))}
+        data={investmentResults}
+        className=''
+        id='result'
+      />
+    ) : null;
+
   return (
     <>
-      <InputForm inputValues={state} dispatch={dispatch} />
+      <InputForm
+        inputValues={inputState}
+        inputDispatch={inputDispatch}
+        error={error}
+      />
+      {/* <ResultsTable results={investmentResults} /> */}
+      {table}
     </>
   );
 }

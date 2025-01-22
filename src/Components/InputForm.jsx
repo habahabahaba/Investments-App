@@ -5,18 +5,18 @@
 // React:
 // Context:
 // Hooks:
+import { calculatorActions } from '../hooks/useCalculator/calculatorReducer';
 // Components:
 import NumInput from './NumInput';
 // CSS:
-import { calculatorActions } from './Calculator';
 
-function InputForm({ inputValues, dispatch }) {
+function InputForm({ inputValues, inputDispatch, error }) {
   const { initialInvestment, annualInvestment, expectedReturn, duration } =
     inputValues;
   const handler =
     (actionName) =>
     ({ target: { value } }) => {
-      dispatch({
+      inputDispatch({
         name: actionName,
         payload: { value: value },
       });
@@ -30,14 +30,16 @@ function InputForm({ inputValues, dispatch }) {
           value={initialInvestment}
           min={0}
           step={1}
-          changeHandler={handler(calculatorActions.initInvest)}
+          changeHandler={handler(calculatorActions.initialInvestment)}
+          error={error.initialInvestment || ''}
         />
         <NumInput
           name='annual investment'
           value={annualInvestment}
           min={0}
           step={1}
-          changeHandler={handler(calculatorActions.annualInvest)}
+          changeHandler={handler(calculatorActions.annualInvestment)}
+          error={error.annualInvestment || ''}
         />
       </div>
       <div className='input-group'>
@@ -47,6 +49,7 @@ function InputForm({ inputValues, dispatch }) {
           min={0}
           step={1}
           changeHandler={handler(calculatorActions.expectReturn)}
+          error={error.expectedReturn || ''}
         />
         <NumInput
           name='Duration'
@@ -54,6 +57,7 @@ function InputForm({ inputValues, dispatch }) {
           min={0}
           step={1}
           changeHandler={handler(calculatorActions.duration)}
+          error={error.duration || ''}
         />
       </div>
     </form>
